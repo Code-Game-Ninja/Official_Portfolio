@@ -86,7 +86,7 @@ const Hero: React.FC = () => {
                                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                                 exit={{ opacity: 0, y: -20, filter: 'blur(10px)', transition: { duration: 0.3 } }}
                                 transition={{ duration: 0.6, delay: 0.2 }}
-                                className="font-sans font-bold text-3xl md:text-6xl text-right text-paper tracking-tight leading-none"
+                                className="font-sans font-bold text-2xl sm:text-3xl md:text-5xl lg:text-6xl text-right text-paper tracking-tight leading-none"
                             >
                                 CHIRAG<br/>MISHRA
                             </motion.h1>
@@ -96,7 +96,7 @@ const Hero: React.FC = () => {
                                 variants={containerLeft}
                                 initial="hidden"
                                 animate="visible"
-                                className="font-sans font-bold text-[25vw] md:text-[20vw] leading-none text-paper tracking-tighter text-right select-none flex overflow-hidden"
+                                className="font-sans font-bold text-[18vw] sm:text-[20vw] md:text-[18vw] lg:text-[15vw] leading-none text-paper tracking-tighter text-right select-none flex overflow-hidden"
                             >
                                 {['C', 'M'].map((char, i) => (
                                     <motion.span key={i} variants={characterAnim} className="inline-block">{char}</motion.span>
@@ -108,7 +108,7 @@ const Hero: React.FC = () => {
 
                 {/* Center Vertical Divider - Appears in final state */}
                 <motion.div 
-                    className="flex flex-col items-center justify-center gap-4 h-[40vh] md:h-[50vh] min-w-[20px]"
+                    className="flex flex-col items-center justify-center gap-2 sm:gap-4 h-[30vh] sm:h-[40vh] md:h-[50vh] min-w-[16px] sm:min-w-[20px]"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isIntro ? 0 : 1 }}
                     transition={{ duration: 0.5, delay: 0.2 }}
@@ -122,14 +122,14 @@ const Hero: React.FC = () => {
                     ></motion.div>
                     
                     {/* Vertical Text */}
-                    <div className="flex flex-col items-center gap-2 md:gap-4 py-2">
+                    <div className="flex flex-col items-center gap-1 sm:gap-2 md:gap-4 py-1 sm:py-2">
                          {['C','H','I','R','A','G'].map((char, i) => (
                              <motion.span 
                                 key={i}
                                 initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
                                 animate={{ opacity: isIntro ? 0 : 1, y: 0, filter: "blur(0px)" }}
                                 transition={{ delay: 0.5 + (i * 0.05), duration: 0.6 }}
-                                className="font-mono text-accent font-bold text-sm md:text-base leading-none select-none"
+                                className="font-mono text-accent font-bold text-[10px] sm:text-sm md:text-base leading-none select-none"
                              >
                                 {char}
                              </motion.span>
@@ -155,7 +155,7 @@ const Hero: React.FC = () => {
                                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                                 exit={{ opacity: 0, y: -20, filter: 'blur(10px)', transition: { duration: 0.3 } }}
                                 transition={{ duration: 0.6, delay: 0.3 }}
-                                className="font-sans font-bold text-3xl md:text-6xl text-left text-paper tracking-tight leading-none"
+                                className="font-sans font-bold text-2xl sm:text-3xl md:text-5xl lg:text-6xl text-left text-paper tracking-tight leading-none"
                             >
                                 FULL STACK<br/>DEVELOPER
                             </motion.h1>
@@ -165,7 +165,7 @@ const Hero: React.FC = () => {
                                 variants={containerRight}
                                 initial="hidden"
                                 animate="visible"
-                                className="font-sans font-bold text-[25vw] md:text-[20vw] leading-none text-paper tracking-tighter text-left select-none flex overflow-hidden"
+                                className="font-sans font-bold text-[18vw] sm:text-[20vw] md:text-[18vw] lg:text-[15vw] leading-none text-paper tracking-tighter text-left select-none flex overflow-hidden"
                             >
                                 {['D', 'E', 'V'].map((char, i) => (
                                     <motion.span key={i} variants={characterAnim} className="inline-block">{char}</motion.span>

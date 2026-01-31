@@ -51,9 +51,9 @@ const AppContent: React.FC = () => {
             key="loader"
             initial={{ opacity: 1 }}
             exit={{ y: "-100%", transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } }}
-            className="fixed inset-0 bg-charcoal z-50 flex flex-col justify-between p-8 md:p-12 text-paper font-mono uppercase"
+            className="fixed inset-0 bg-charcoal z-50 flex flex-col justify-between p-4 sm:p-6 md:p-12 text-paper font-mono uppercase"
           >
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-start text-[10px] sm:text-xs">
                <span>[ System Initializing ]</span>
                <span>Rajasthan, India</span>
             </div>
@@ -63,11 +63,11 @@ const AppContent: React.FC = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
-                  className="font-sans font-bold text-6xl md:text-9xl tracking-tighter"
+                  className="font-sans font-bold text-5xl sm:text-6xl md:text-9xl tracking-tighter"
                >
                   CM
                </motion.h1>
-               <div className="w-64 h-[1px] bg-paper/20 mt-8 relative overflow-hidden">
+               <div className="w-48 sm:w-64 h-[1px] bg-paper/20 mt-6 sm:mt-8 relative overflow-hidden">
                   <motion.div 
                     className="absolute top-0 left-0 h-full bg-accent"
                     initial={{ width: "0%" }}
@@ -76,8 +76,8 @@ const AppContent: React.FC = () => {
                </div>
             </div>
 
-            <div className="flex justify-between items-end">
-               <span className="text-accent text-xl">{count}%</span>
+            <div className="flex justify-between items-end text-sm sm:text-base">
+               <span className="text-accent text-lg sm:text-xl">{count}%</span>
                <span>© 2026</span>
             </div>
           </motion.div>

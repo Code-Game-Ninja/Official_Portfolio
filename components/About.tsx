@@ -123,11 +123,11 @@ const About: React.FC = () => {
             </motion.div>
             
             {/* Main Typographic Grid */}
-            <div className="font-sans font-bold text-[13vw] md:text-[9vw] leading-[0.85] tracking-tighter uppercase text-charcoal flex flex-col items-start">
+            <div className="font-sans font-bold text-[11vw] sm:text-[12vw] md:text-[9vw] leading-[0.85] tracking-tighter uppercase text-charcoal flex flex-col items-start">
               
-              <motion.div variants={item} className="flex items-center gap-4 md:gap-8 whitespace-nowrap">
+              <motion.div variants={item} className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 md:gap-8 sm:whitespace-nowrap">
                 <EncryptedText text="Chirag" />
-                <span className="font-mono font-normal text-charcoal/30 text-[1.5rem] md:text-[2.5rem] tracking-widest translate-y-[-0.2em]">
+                <span className="font-mono font-normal text-charcoal/30 text-base sm:text-lg md:text-[2rem] lg:text-[2.5rem] tracking-widest sm:translate-y-[-0.2em]">
                     <EncryptedText text="[ Coder ]" delay={200} />
                 </span>
               </motion.div>

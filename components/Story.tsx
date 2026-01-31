@@ -25,7 +25,7 @@ const Chapter: React.FC<ChapterProps> = ({ number, title, children }) => {
             <span className="font-mono text-accent text-xs md:text-sm font-bold uppercase tracking-widest display-block mb-2">
               ( Chapter {number} )
             </span>
-            <h2 className="font-sans text-4xl md:text-5xl font-bold uppercase leading-[0.9] text-paper">
+            <h2 className="font-sans text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold uppercase leading-[0.9] text-paper">
               {title}
             </h2>
           </motion.div>
@@ -53,7 +53,7 @@ const Paragraph: React.FC<ParagraphProps> = ({ children, highlight = false }) =>
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className={`font-sans text-xl md:text-3xl leading-relaxed mb-12 ${highlight ? 'text-paper' : 'text-paper/70'} font-light`}
+      className={`font-sans text-base sm:text-lg md:text-2xl lg:text-3xl leading-relaxed mb-8 sm:mb-12 ${highlight ? 'text-paper' : 'text-paper/70'} font-light`}
     >
       {children}
     </motion.p>
@@ -102,7 +102,7 @@ const Story: React.FC = () => {
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
-             <h1 className="font-sans font-bold text-[12vw] leading-[0.8] tracking-tighter uppercase text-paper mix-blend-screen">
+             <h1 className="font-sans font-bold text-[14vw] sm:text-[12vw] leading-[0.8] tracking-tighter uppercase text-paper mix-blend-screen">
               The<br />
               <span className="text-accent">Origin</span><br />
               Story

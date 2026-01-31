@@ -191,7 +191,7 @@ const Footer: React.FC = () => {
                       initial="hidden"
                       whileInView="visible"
                       viewport={{ once: true, margin: "-100px" }}
-                      className={`font-sans text-[15vw] lg:text-[10rem] font-bold leading-[0.85] tracking-tighter ${text === 'SAY' ? 'text-accent' : 'text-paper'}`}
+                      className={`font-sans text-[12vw] sm:text-[14vw] lg:text-[10rem] font-bold leading-[0.85] tracking-tighter ${text === 'SAY' ? 'text-accent' : 'text-paper'}`}
                     >
                       {text}
                     </motion.h2>
@@ -309,9 +309,9 @@ const Footer: React.FC = () => {
       </div>
 
       {/* Bottom Bar */}
-       <div className="w-full border-t border-paper/10 p-6 md:p-8 flex flex-col md:flex-row justify-between items-end md:items-center gap-6 bg-[#0a0a0a] z-20">
-         <div className="flex flex-col gap-2">
-            <div className="flex gap-6 font-mono text-xs uppercase tracking-widest">
+       <div className="w-full border-t border-paper/10 p-4 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sm:gap-6 bg-[#0a0a0a] z-20">
+         <div className="flex flex-col gap-2 w-full md:w-auto">
+            <div className="flex flex-wrap gap-4 sm:gap-6 font-mono text-[10px] sm:text-xs uppercase tracking-widest">
                 {socialLinks.map((link) => (
                     <a 
                       key={link.name}
@@ -331,7 +331,7 @@ const Footer: React.FC = () => {
             </div>
          </div>
 
-         <div className="flex items-center gap-4 bg-charcoal/50 p-2 border border-paper/10 rounded-full pr-6">
+         <div className="flex items-center gap-2 sm:gap-4 bg-charcoal/50 p-2 border border-paper/10 rounded-full pr-4 sm:pr-6 w-full md:w-auto justify-between md:justify-start">
             <div className="w-8 h-8 bg-accent rounded-full animate-spin-slow flex items-center justify-center text-charcoal text-[8px] overflow-hidden">
                <div className="w-full h-[1px] bg-charcoal"></div>
             </div>

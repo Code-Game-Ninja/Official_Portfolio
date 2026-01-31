@@ -50,7 +50,7 @@ const Experience: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="font-sans font-bold text-6xl md:text-8xl tracking-tighter uppercase mb-4"
+                className="font-sans font-bold text-4xl sm:text-5xl md:text-6xl lg:text-8xl tracking-tighter uppercase mb-4"
               >
                 Experience
               </motion.h2>
@@ -96,7 +96,7 @@ const Experience: React.FC = () => {
               <div className="md:w-1/3 flex flex-col gap-2">
                  <span className="font-mono text-accent text-xs uppercase tracking-widest font-bold">{exp.date}</span>
                  <span className="font-mono text-[10px] opacity-50 uppercase tracking-widest">[{exp.type}]</span>
-                 <h3 className="font-sans text-3xl md:text-4xl font-bold uppercase mt-2 group-hover:text-charcoal/70 transition-colors leading-tight">{exp.company}</h3>
+                 <h3 className="font-sans text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold uppercase mt-2 group-hover:text-charcoal/70 transition-colors leading-tight">{exp.company}</h3>
               </div>
 
               {/* Right: Content */}

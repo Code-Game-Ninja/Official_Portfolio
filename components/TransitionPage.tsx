@@ -53,13 +53,13 @@ const TransitionPage: React.FC<TransitionPageProps> = ({ children, sanskrit, eng
             {/* Background Texture */}
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none"></div>
 
-            <div className="relative z-10 flex flex-col items-center text-center gap-8">
+            <div className="relative z-10 flex flex-col items-center text-center gap-4 sm:gap-6 md:gap-8 px-4">
               {/* Sanskrit - Blur In */}
               <motion.h2
                 initial={{ filter: "blur(15px)", opacity: 0, scale: 1.1 }}
                 animate={{ filter: "blur(0px)", opacity: 1, scale: 1 }}
                 transition={{ duration: 1.0, ease: "easeOut" }}
-                className="font-sanskrit text-5xl md:text-7xl text-paper font-bold leading-normal"
+                className="font-sanskrit text-2xl sm:text-4xl md:text-5xl lg:text-7xl text-paper font-bold leading-normal"
               >
                 {sanskrit}
               </motion.h2>
@@ -67,9 +67,9 @@ const TransitionPage: React.FC<TransitionPageProps> = ({ children, sanskrit, eng
               {/* Divider */}
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: "100px" }}
+                animate={{ width: "80px" }}
                 transition={{ delay: 0.8, duration: 0.5 }}
-                className="h-[1px] bg-accent"
+                className="h-[1px] bg-accent sm:w-[100px]"
               />
 
               {/* English - Typewriter / Letter by Letter */}
@@ -77,7 +77,7 @@ const TransitionPage: React.FC<TransitionPageProps> = ({ children, sanskrit, eng
                 variants={container}
                 initial="hidden"
                 animate="show"
-                className="font-mono text-accent text-sm md:text-lg uppercase tracking-widest max-w-xl"
+                className="font-mono text-accent text-xs sm:text-sm md:text-lg uppercase tracking-widest max-w-xl px-2"
               >
                 {english.split("").map((char, index) => (
                   <motion.span key={index} variants={letter}>

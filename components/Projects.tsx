@@ -86,8 +86,8 @@ const Projects: React.FC = () => {
     <section id="work" className="bg-paper text-charcoal py-24 md:py-40 px-6 md:px-12 border-t border-charcoal/10 relative">
        
        <div className="max-w-[95vw] mx-auto flex flex-col gap-32 md:gap-48">
-          <div className="flex justify-between items-end border-b border-charcoal/10 pb-8">
-             <h2 className="font-sans font-bold text-6xl md:text-8xl tracking-tighter uppercase">Selected Work</h2>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 border-b border-charcoal/10 pb-6 sm:pb-8">
+             <h2 className="font-sans font-bold text-4xl sm:text-5xl md:text-6xl lg:text-8xl tracking-tighter uppercase">Selected Work</h2>
              <Link to="/all-projects" className="hidden md:block">
                <button className="font-mono text-xs uppercase tracking-widest border border-charcoal px-6 py-3 hover:bg-charcoal hover:text-paper transition-all">
                  View Archive →
@@ -133,7 +133,7 @@ const Projects: React.FC = () => {
                  <div className="w-full h-[1px] bg-charcoal/20 mb-8 origin-left transform scale-x-100 transition-transform duration-700 group-hover:bg-accent group-hover:scale-x-110"></div>
 
                  {/* Title */}
-                 <h3 className="font-sans text-4xl md:text-6xl font-bold uppercase leading-[0.9] mb-4 text-charcoal group-hover:text-accent transition-colors duration-300">
+                 <h3 className="font-sans text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold uppercase leading-[0.9] mb-4 text-charcoal group-hover:text-accent transition-colors duration-300">
                    {project.title}
                  </h3>
 

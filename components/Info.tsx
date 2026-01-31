@@ -60,17 +60,17 @@ const Info: React.FC = () => {
         DATA
       </motion.div>
 
-      <div className="max-w-[95vw] mx-auto relative z-10 flex flex-col gap-40">
+      <div className="max-w-[95vw] mx-auto relative z-10 flex flex-col gap-20 sm:gap-28 md:gap-40">
         
         {/* Certifications: The Data Log */}
         <div>
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-paper/20 pb-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 sm:mb-12 md:mb-16 border-b border-paper/20 pb-4 sm:pb-6 gap-4">
             <motion.h2 
               initial={{ opacity: 0, x: -50, filter: "blur(10px)" }}
               whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="font-sans font-bold text-6xl md:text-8xl tracking-tighter uppercase"
+              className="font-sans font-bold text-4xl sm:text-5xl md:text-6xl lg:text-8xl tracking-tighter uppercase"
             >
               Certifications
             </motion.h2>
@@ -146,13 +146,13 @@ const Info: React.FC = () => {
 
         {/* Tech Stack: The Modular Grid */}
         <div>
-           <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-paper/20 pb-6">
+           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 sm:mb-12 md:mb-16 border-b border-paper/20 pb-4 sm:pb-6 gap-4">
             <motion.h2 
               initial={{ opacity: 0, x: -50, filter: "blur(10px)" }}
               whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="font-sans font-bold text-6xl md:text-8xl tracking-tighter uppercase"
+              className="font-sans font-bold text-4xl sm:text-5xl md:text-6xl lg:text-8xl tracking-tighter uppercase"
             >
               Tech Stack
             </motion.h2>
