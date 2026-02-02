@@ -1,11 +1,31 @@
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 
-const skills = [
-  { category: "Frontend", code: "FE", items: ["React", "TypeScript", "Tailwind", "Next.js", "Framer Motion", "GSAP", "Three.js"] },
-  { category: "Backend", code: "BE", items: ["Node.js", "Express", "MongoDB", "PostgreSQL", "GraphQL", "REST API", "Socket.io"] },
-  { category: "AI & Data", code: "AI", items: ["Gemini API", "Python", "Vertex AI", "LangChain", "OpenAI API", "RAG"] },
-  { category: "Tools", code: "TL", items: ["Git", "Docker", "Figma", "Linux", "AWS", "Vercel"] },
+// Tech stack with logos (using CDN icons)
+const techStack = [
+  // Large items (span 2 cols)
+  { name: "React", code: "FE", size: "large", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+  { name: "Node.js", code: "BE", size: "large", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
+  
+  // Medium items
+  { name: "TypeScript", code: "FE", size: "medium", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
+  { name: "MongoDB", code: "BE", size: "medium", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
+  { name: "Tailwind", code: "FE", size: "medium", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" },
+  { name: "Express", code: "BE", size: "medium", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
+  
+  // Regular items
+  { name: "Next.js", code: "FE", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
+  { name: "Python", code: "AI", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
+  { name: "Git", code: "TL", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
+  { name: "Figma", code: "TL", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
+  { name: "Docker", code: "TL", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" },
+  { name: "PostgreSQL", code: "BE", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" },
+  { name: "GraphQL", code: "BE", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg" },
+  { name: "AWS", code: "TL", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" },
+  { name: "Linux", code: "TL", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" },
+  { name: "GSAP", code: "FE", size: "small", logo: "https://cdn.worldvectorlogo.com/logos/gsap-greensock.svg" },
+  { name: "Three.js", code: "FE", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg" },
+  { name: "Vercel", code: "TL", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg" },
 ];
 
 const certifications = [
@@ -44,7 +64,18 @@ const Info: React.FC = () => {
     }
   };
 
-  const allSkills = skills.flatMap(grp => grp.items.map(name => ({ category: grp.category, code: grp.code, name })));
+  const bentoItem: Variants = {
+    hidden: { y: 30, opacity: 0, scale: 0.95 },
+    show: { 
+      y: 0, 
+      opacity: 1,
+      scale: 1,
+      transition: { 
+        duration: 0.6, 
+        ease: [0.22, 1, 0.36, 1] 
+      }
+    }
+  };
 
   return (
     <section id="info" className="bg-charcoal text-paper py-24 md:py-32 border-t border-paper/10 relative overflow-hidden">
@@ -169,52 +200,85 @@ const Info: React.FC = () => {
             </motion.div>
           </div>
 
+          {/* Bento Grid */}
           <motion.div 
             variants={container}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: "-10%" }}
-            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 border-l border-t border-paper/10"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4"
           >
-             {allSkills.map((skill, i) => (
+             {techStack.map((tech, i) => (
                <motion.div 
                  key={i}
-                 variants={item}
-                 whileHover={{ scale: 1.02, zIndex: 10 }}
-                 className="aspect-square border-r border-b border-paper/10 p-4 relative group bg-charcoal transition-all duration-300"
+                 variants={bentoItem}
+                 whileHover={{ scale: 1.02, y: -5 }}
+                 className={`
+                   relative group cursor-pointer overflow-hidden rounded-2xl border border-paper/10 bg-paper/5 backdrop-blur-sm
+                   ${tech.size === 'large' ? 'col-span-2 row-span-2 min-h-[200px] sm:min-h-[250px]' : ''}
+                   ${tech.size === 'medium' ? 'col-span-2 sm:col-span-1 lg:col-span-2 min-h-[120px] sm:min-h-[150px]' : ''}
+                   ${tech.size === 'small' ? 'col-span-1 min-h-[100px] sm:min-h-[120px]' : ''}
+                   transition-all duration-500 ease-out
+                 `}
                >
-                  {/* Hover Fill */}
-                  <div className="absolute inset-0 bg-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
+                  {/* Background Logo - Appears on Hover */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-20 transition-all duration-500 ease-out scale-75 group-hover:scale-100">
+                    <img 
+                      src={tech.logo} 
+                      alt={tech.name}
+                      className={`
+                        ${tech.size === 'large' ? 'w-40 h-40 sm:w-52 sm:h-52' : ''}
+                        ${tech.size === 'medium' ? 'w-24 h-24 sm:w-32 sm:h-32' : ''}
+                        ${tech.size === 'small' ? 'w-16 h-16 sm:w-20 sm:h-20' : ''}
+                        object-contain filter brightness-0 invert
+                      `}
+                    />
+                  </div>
 
-                  <div className="relative z-10 h-full flex flex-col justify-between group-hover:text-charcoal transition-colors duration-300">
+                  {/* Gradient Overlay on Hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-accent/0 via-accent/0 to-accent/0 group-hover:from-accent/20 group-hover:via-accent/10 group-hover:to-transparent transition-all duration-500"></div>
+
+                  {/* Content */}
+                  <div className="relative z-10 h-full p-3 sm:p-4 flex flex-col justify-between">
+                     {/* Top Row */}
                      <div className="flex justify-between items-start">
-                        <span className="font-mono text-[10px] uppercase tracking-widest opacity-50 group-hover:opacity-100 transition-opacity">[{skill.code}]</span>
-                        <span className="font-mono text-[10px] opacity-30 group-hover:opacity-100 transition-opacity">{(i + 1).toString().padStart(2, '0')}</span>
-                     </div>
-
-                     <div className="self-center w-full">
-                        <span className="font-sans font-bold text-lg md:text-xl lg:text-2xl uppercase text-center block break-words leading-tight group-hover:scale-110 transition-transform duration-300 transform origin-center">
-                          {skill.name}
+                        <span className="font-mono text-[8px] sm:text-[10px] uppercase tracking-widest text-paper/40 group-hover:text-accent transition-colors duration-300">
+                          [{tech.code}]
+                        </span>
+                        <span className="font-mono text-[8px] sm:text-[10px] text-paper/20 group-hover:text-paper/60 transition-colors duration-300">
+                          {(i + 1).toString().padStart(2, '0')}
                         </span>
                      </div>
 
+                     {/* Center - Tech Name */}
+                     <div className="flex-1 flex items-center justify-center">
+                        <span className={`
+                          font-sans font-bold uppercase text-center leading-tight
+                          group-hover:text-accent transition-colors duration-300
+                          ${tech.size === 'large' ? 'text-2xl sm:text-3xl md:text-4xl' : ''}
+                          ${tech.size === 'medium' ? 'text-lg sm:text-xl md:text-2xl' : ''}
+                          ${tech.size === 'small' ? 'text-sm sm:text-base md:text-lg' : ''}
+                        `}>
+                          {tech.name}
+                        </span>
+                     </div>
+
+                     {/* Bottom Row */}
                      <div className="flex justify-between items-end">
-                        <div className="w-2 h-2 bg-paper/20 group-hover:bg-charcoal/20 transition-colors"></div>
-                        <span className="text-[10px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0 transform">●</span>
+                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-paper/10 group-hover:bg-accent transition-colors duration-300"></div>
+                        <motion.span 
+                          className="text-[10px] sm:text-xs text-paper/0 group-hover:text-paper/60 transition-all duration-300"
+                          initial={{ opacity: 0, x: -10 }}
+                          whileHover={{ opacity: 1, x: 0 }}
+                        >
+                          →
+                        </motion.span>
                      </div>
                   </div>
+
+                  {/* Border Glow Effect on Hover */}
+                  <div className="absolute inset-0 rounded-2xl border border-accent/0 group-hover:border-accent/30 transition-all duration-500"></div>
                </motion.div>
-             ))}
-             
-             {/* Empty Grid Cells Filler */}
-             {Array.from({ length: 5 - (allSkills.length % 5) }).map((_, i) => (
-                (allSkills.length % 5 !== 0) && (
-                    <motion.div 
-                        key={`empty-${i}`} 
-                        variants={item}
-                        className="hidden lg:block aspect-square border-r border-b border-paper/5 bg-paper/[0.02]"
-                    />
-                )
              ))}
           </motion.div>
         </div>
