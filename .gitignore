@@ -55,3 +55,9 @@ coverage
 *.pem
 .npm
 .yarn
+
+# AI Artifacts & Deploy Caches
+.gemini/
+.agent/
+.vercel/
+.eslintcache
