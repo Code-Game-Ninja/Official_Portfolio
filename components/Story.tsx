@@ -138,7 +138,6 @@ const Story: React.FC = () => {
     >
       {/* Background massive wireframe text */}
       <motion.div
-        style={{ y: yBg }}
         className="fixed top-[20%] left-[-5%] font-sans font-bold text-[40vw] leading-none text-transparent opacity-5 uppercase select-none pointer-events-none z-0"
         // @ts-ignore
         style={{ WebkitTextStroke: '1px rgba(244, 244, 240, 0.3)', y: yBg }}
@@ -200,7 +199,7 @@ const Story: React.FC = () => {
               My journey into technology wasn't a straight line—it was a winding path of questioning 'How?' and 'Why?'.
             </InteractiveScrubText>
             <InteractiveScrubText>
-              I wrote my first line of code during my undergrad at the Central University of Rajasthan. It was simple, clumsy, but it rendered 'Hello World' onto a screen. That moment was electric. It was the realization that I could create something from nothing.
+              I wrote my first line of code while pursuing my Integrated M.Sc. at the Central University of Rajasthan. It was simple, clumsy, but it rendered 'Hello World' onto a screen. That moment was electric: I could create something from nothing.
             </InteractiveScrubText>
           </Chapter>
 
@@ -215,13 +214,13 @@ const Story: React.FC = () => {
               I didn't just want to build websites; I wanted to build experiences. I started experimenting with Tailwind CSS for rapid styling and GSAP/Framer Motion to breathe life into static elements.
             </InteractiveScrubText>
             <InteractiveScrubText>
-              My internship at Unified Mentor was the crucible. Working remotely, I learned the importance of disciplined code, clear communication, and the art of debugging at 2 AM. It transformed me from a student into a builder.
+              At Unified Mentor, I built a catering system and a university career guidance system. The work strengthened my full-stack fundamentals, disciplined debugging, communication, and ability to turn requirements into usable products.
             </InteractiveScrubText>
           </Chapter>
 
           <Chapter number="03" title="The Future">
             <InteractiveScrubText>
-              Today, I stand at the intersection of Design and <ImageRevealWord word="Intelligence" imgSrc="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1000&auto=format&fit=crop" />.
+              Today, I work as a Full Stack Developer at Samyora, at the intersection of Design and <ImageRevealWord word="Intelligence" imgSrc="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1000&auto=format&fit=crop" />.
             </InteractiveScrubText>
             <InteractiveScrubText>
               I'm not just coding interfaces; I'm integrating AI. Working with Google Cloud's Gemini API and Vertex AI has opened a new dimension.

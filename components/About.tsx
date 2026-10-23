@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Terminal, InteractiveTerminal, CommandDefinition } from './Terminal';
+import { profile } from '../portfolioData';
 
 const CYBER_CHARS = "ABCDEF123456!@#$%^&*()_+-=[]{}|;:,.<>?";
 
@@ -165,7 +166,6 @@ const About: React.FC = () => {
 
       {/* Background massive wireframe text */}
       <motion.div
-        style={{ y: y3 }}
         className="absolute top-[5%] left-[-5%] font-sans font-bold text-[30vw] leading-none text-transparent opacity-10 uppercase select-none pointer-events-none"
         // @ts-ignore
         style={{ WebkitTextStroke: '2px rgba(244, 244, 240, 0.2)', y: y3 }}
@@ -184,7 +184,7 @@ const About: React.FC = () => {
 
             <motion.div style={{ y: y2 }} className="ml-[20%] md:ml-[30%] mb-12 flex flex-col md:flex-row items-start md:items-center gap-4">
               <span className="font-mono font-normal text-charcoal text-[10px] md:text-sm tracking-widest bg-accent p-2 border border-accent inline-block hover:scale-105 hover:bg-transparent hover:text-accent transition-all cursor-crosshair">
-                [ STATUS: WEB DEV ]
+                [ STATUS: FULL STACK DEV ]
               </span>
               <div className="flex items-center gap-4 md:gap-8">
                 <div className="hidden md:block w-16 md:w-32 h-[1px] bg-paper"></div>
@@ -222,7 +222,7 @@ const About: React.FC = () => {
                     output: (
                       <div className="flex flex-col gap-2 border-l-2 border-accent pl-4 text-paper/80 mb-4">
                         <span className="text-accent font-bold">[ Technical Profile ]</span>
-                        <p className="max-w-2xl">Creative and detail-oriented Web Developer with a strong foundation in front-end and back-end technologies. Experienced in building responsive, dynamic, and interactive web apps using the MERN stack.</p>
+                        <p className="max-w-2xl">Full Stack Developer at Samyora building responsive products across front-end, back-end, APIs, authentication, databases, and modern TypeScript application stacks.</p>
                         <div className="flex gap-4 mt-2">
                           <Link to="/story" className="text-accent hover:underline">[Read Log]</Link>
                           <a href="/Resume_Chirag.pdf" download="Chirag_Mishra_Resume.pdf" className="text-accent hover:underline">[.PDF]</a>
@@ -235,7 +235,7 @@ const About: React.FC = () => {
                     output: (
                       <div className="flex flex-col gap-2 border-l-2 border-[#ffbd2e] pl-4 text-paper/80 mb-4">
                         <span className="text-[#ffbd2e] font-bold animate-pulse">[ OVERRIDE ACTIVE ] SYS.02</span>
-                        <p className="max-w-2xl">Passionate about UI/UX, optimization, and building scalable web solutions. Skilled in API integration, animations (GSAP/AOS), and secure authentication.</p>
+                        <p className="max-w-2xl">Available for full-time opportunities. Focused on scalable web and mobile products, thoughtful UI/UX, API integration, real-time systems, AI features, and secure authentication.</p>
                       </div>
                     )
                   },
@@ -245,19 +245,19 @@ const About: React.FC = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-l-2 border-[#27c93f] pl-4 text-paper/80 mb-4">
                         <div>
                           <span className="opacity-50 text-[10px] uppercase block">Location</span>
-                          <span className="font-bold text-[#27c93f]">RAJASTHAN, IN</span>
+                          <span className="font-bold text-[#27c93f]">{profile.location.toUpperCase()}</span>
                         </div>
                         <div>
                           <span className="opacity-50 text-[10px] uppercase block">Status</span>
                           <span className="font-bold flex items-center gap-2">
                             <span className="w-2 h-2 bg-[#27c93f] rounded-full animate-pulse"></span>
-                            OPEN FOR WORK
+                            AVAILABLE FULL-TIME
                           </span>
                         </div>
                         <div className="md:col-span-2">
                           <span className="opacity-50 text-[10px] uppercase block">Education</span>
-                          <span className="font-bold block">B.Sc Computer Science</span>
-                          <span className="opacity-50 text-xs">Central Univ. of Rajasthan</span>
+                          <span className="font-bold block">{profile.education}</span>
+                          <span className="opacity-50 text-xs">{profile.university}</span>
                         </div>
                       </div>
                     )

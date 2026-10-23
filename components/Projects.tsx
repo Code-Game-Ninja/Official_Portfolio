@@ -1,46 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, Variants, useSpring } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Link } from 'react-router-dom';
-
-interface Project {
-  id: number;
-  title: string;
-  category: string;
-  image: string;
-  year: string;
-  description: string;
-  tech: string[];
-}
-
-const projects: Project[] = [
-  {
-    id: 1,
-    title: "Career Guidance System",
-    category: "Full Stack Platform",
-    image: "https://picsum.photos/800/600?random=1",
-    year: "2024",
-    description: "A platform that helps students discover strengths via aptitude tests, get personalized career recommendations, and explore suitable colleges. Features a secure user authentication system and RESTful APIs for booking logic.",
-    tech: ["HTML/CSS/JS", "Express.js", "MongoDB", "Node.js"]
-  },
-  {
-    id: 2,
-    title: "Catering Reservation App",
-    category: "Service Platform",
-    image: "https://picsum.photos/800/600?random=2",
-    year: "2024",
-    description: "A platform for users to browse catering services, view menus, and book reservations for events. Designed with an intuitive user interface using Tailwind CSS and robust back-end functionalities.",
-    tech: ["JavaScript", "Tailwind CSS", "Express.js", "MongoDB"]
-  },
-  {
-    id: 3,
-    title: "Personal Portfolio",
-    category: "Interactive Web",
-    image: "https://picsum.photos/800/600?random=3",
-    year: "2025",
-    description: "An interactive and responsive personal portfolio showcasing projects, skills, and experience. Utilized modern front-end libraries like GSAP and AOS to create engaging animations.",
-    tech: ["GSAP", "AOS", "React/Tailwind", "Framer Motion"]
-  }
-];
+import { PortfolioProject, projects } from '../portfolioData';
 
 // Clean Brutalist Image Component (No Blur/Liquid Distortion)
 const CleanImage: React.FC<{ src: string; alt: string; isActive: boolean }> = ({ src, alt, isActive }) => {
@@ -62,7 +23,7 @@ const CleanImage: React.FC<{ src: string; alt: string; isActive: boolean }> = ({
   );
 };
 
-const ProjectRow: React.FC<{ project: Project; setSelectedProject: (p: Project) => void }> = ({ project, setSelectedProject }) => {
+const ProjectRow: React.FC<{ project: PortfolioProject; setSelectedProject: (p: PortfolioProject) => void }> = ({ project, setSelectedProject }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -127,7 +88,7 @@ const ProjectRow: React.FC<{ project: Project; setSelectedProject: (p: Project) 
 };
 
 const Projects: React.FC = () => {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null);
 
   // Modal Animation Variants (Updated for Brutalism)
   const overlayVariants: Variants = {
@@ -257,10 +218,23 @@ const Projects: React.FC = () => {
                   </motion.div>
                 </div>
 
-                <motion.div variants={contentItemVariants} className="mt-auto pt-8">
-                  <button className="w-full bg-charcoal text-paper py-6 font-mono font-bold text-sm hover:bg-accent hover:text-charcoal transition-colors uppercase tracking-widest">
-                    INITIALIZE LIVE PREVIEW
-                  </button>
+                <motion.div variants={contentItemVariants} className="mt-auto pt-8 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <a
+                    href={selectedProject.primaryUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full bg-charcoal text-paper py-6 px-4 text-center font-mono font-bold text-sm hover:bg-accent hover:text-charcoal transition-colors uppercase tracking-widest"
+                  >
+                    {selectedProject.primaryLabel}
+                  </a>
+                  <a
+                    href={selectedProject.repoUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full border border-charcoal text-charcoal py-6 px-4 text-center font-mono font-bold text-sm hover:bg-charcoal hover:text-paper transition-colors uppercase tracking-widest"
+                  >
+                    View GitHub
+                  </a>
                 </motion.div>
 
               </div>

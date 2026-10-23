@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
+import { profile } from '../portfolioData';
 
 const Hero: React.FC = () => {
     const mouseX = useMotionValue(0);
@@ -36,9 +37,9 @@ const Hero: React.FC = () => {
                     initial={{ scale: 1.1, filter: "grayscale(100%) blur(20px)" }}
                     animate={{ scale: 1, filter: "grayscale(100%) blur(0px)" }}
                     transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
-                    src="https://picsum.photos/1920/1080?grayscale&random=10"
-                    alt="Hero Background Art"
-                    className="w-full h-full object-cover opacity-30 mix-blend-luminosity origin-right"
+                    src={profile.githubAvatar}
+                    alt={`${profile.name} portrait`}
+                    className="w-full h-full object-cover object-center opacity-30 mix-blend-luminosity origin-right"
                 />
 
                 {/* Masked Hover Layer: High contrast real image */}
@@ -47,9 +48,9 @@ const Hero: React.FC = () => {
                     style={{ maskImage, WebkitMaskImage: maskImage }}
                 >
                     <img
-                        src="https://picsum.photos/1920/1080?random=11"
-                        alt="Hero Real Color"
-                        className="w-full h-full object-cover filter contrast-[1.2] saturate-[1.5]"
+                        src={profile.githubAvatar}
+                        alt={`${profile.name} portrait in color`}
+                        className="w-full h-full object-cover object-center filter contrast-[1.2] saturate-[1.5]"
                     />
                 </motion.div>
 
@@ -101,9 +102,9 @@ const Hero: React.FC = () => {
                         >
                             <div className="w-2 h-2 bg-accent mt-1 animate-pulse rounded-none"></div>
                             <div className="flex flex-col gap-2">
-                                <span className="text-accent font-bold">FULL STACK DEVELOPER</span>
+                                <span className="text-accent font-bold">{profile.role.toUpperCase()}</span>
                                 <span>BUILDING SCALABLE ARCHITECTURES</span>
-                                <span>BASED IN RAJASTHAN, IN</span>
+                                <span>BASED IN KISHANGARH, IN</span>
                             </div>
                         </motion.div>
                     </motion.div>

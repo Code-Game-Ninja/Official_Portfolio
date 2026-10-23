@@ -1,65 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, useMotionValue, useSpring, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-
-const allProjects = [
-  {
-    year: "2025",
-    project: "Personal Portfolio V2",
-    madeAt: "Personal",
-    builtWith: ["React", "Framer Motion", "Tailwind"],
-    link: "https://code-game-ninja.github.io/Personal-Portfolio/",
-    image: "https://images.unsplash.com/photo-1481480036666-4071ecb1540a?q=80&w=600&auto=format&fit=crop"
-  },
-  {
-    year: "2024",
-    project: "Career Guidance System",
-    madeAt: "Academic",
-    builtWith: ["MERN Stack", "REST API", "Auth"],
-    link: "#",
-    image: "https://images.unsplash.com/photo-1542626991-cbc4e32524cc?q=80&w=600&auto=format&fit=crop"
-  },
-  {
-    year: "2024",
-    project: "Catering Reservation App",
-    madeAt: "Freelance",
-    builtWith: ["Express", "MongoDB", "Tailwind"],
-    link: "#",
-    image: "https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=600&auto=format&fit=crop"
-  },
-  {
-    year: "2024",
-    project: "Gemini Chat Interface",
-    madeAt: "Personal",
-    builtWith: ["Gemini API", "React", "Node.js"],
-    link: "#",
-    image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=600&auto=format&fit=crop"
-  },
-  {
-    year: "2023",
-    project: "Weather Dashboard",
-    madeAt: "Side Project",
-    builtWith: ["OpenWeather API", "JavaScript", "CSS"],
-    link: "#",
-    image: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?q=80&w=600&auto=format&fit=crop"
-  },
-  {
-    year: "2023",
-    project: "E-Commerce Landing",
-    madeAt: "Practice",
-    builtWith: ["HTML", "SCSS", "JS"],
-    link: "#",
-    image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?q=80&w=600&auto=format&fit=crop"
-  },
-  {
-    year: "2023",
-    project: "Task Manager CLI",
-    madeAt: "Learning",
-    builtWith: ["Node.js", "File System"],
-    link: "#",
-    image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&auto=format&fit=crop"
-  }
-];
+import { projects } from '../portfolioData';
 
 const Archive: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -107,11 +49,11 @@ const Archive: React.FC = () => {
         }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        {allProjects.map((project, i) => (
+        {projects.map((project, i) => (
           <img
             key={i}
             src={project.image}
-            alt={project.project}
+            alt={project.title}
             className={`absolute inset-0 w-full h-full object-cover filter grayscale sepia-[0.2] transition-opacity duration-300 ${hoveredIndex === i ? 'opacity-100' : 'opacity-0'}`}
           />
         ))}
@@ -144,7 +86,7 @@ const Archive: React.FC = () => {
           </div>
           <div className="hidden md:block pb-4 text-right">
             <p className="font-mono text-xs uppercase tracking-widest text-paper/40">
-              Total Projects: {allProjects.length.toString().padStart(2, '0')}
+              Total Projects: {projects.length.toString().padStart(2, '0')}
             </p>
             <p className="font-mono text-xs uppercase tracking-widest text-paper/40">
               2023 — 2025
@@ -156,14 +98,14 @@ const Archive: React.FC = () => {
         <div className="hidden md:grid grid-cols-12 border-b border-paper/20 pb-4 font-mono text-xs uppercase tracking-widest text-paper/40 mb-4">
           <div className="col-span-1">Year</div>
           <div className="col-span-5">Project</div>
-          <div className="col-span-2">Made at</div>
+          <div className="col-span-2">Type</div>
           <div className="col-span-3">Built with</div>
           <div className="col-span-1 text-right">Link</div>
         </div>
 
         {/* List */}
         <div className="flex flex-col" onMouseLeave={() => setHoveredIndex(null)}>
-          {allProjects.map((item, i) => {
+          {projects.map((item, i) => {
             const isHovered = hoveredIndex === i;
             return (
               <motion.div
@@ -195,16 +137,16 @@ const Archive: React.FC = () => {
 
                   <div className="col-span-5">
                     <h3 className={`font-sans text-3xl md:text-5xl font-bold uppercase tracking-tight transition-transform duration-500 ease-out ${isHovered ? 'translate-x-8 mix-blend-multiply' : ''}`}>
-                      {item.project}
+                      {item.title}
                     </h3>
                   </div>
 
                   <div className="col-span-2 font-mono text-xs uppercase tracking-widest opacity-80 font-bold">
-                    [{item.madeAt}]
+                    [{item.category}]
                   </div>
 
                   <div className="col-span-3 flex flex-wrap gap-2">
-                    {item.builtWith.map((tech, t) => (
+                    {item.tech.map((tech, t) => (
                       <span
                         key={t}
                         className={`font-mono text-[10px] uppercase border rounded-full px-3 py-1 transition-colors duration-300 ${isHovered ? 'border-charcoal/30 text-charcoal font-bold' : 'border-paper/20 text-paper/60'
@@ -217,7 +159,7 @@ const Archive: React.FC = () => {
 
                   <div className="col-span-1 text-right flex justify-end w-full">
                     <a
-                      href={item.link}
+                      href={item.primaryUrl}
                       target="_blank"
                       rel="noreferrer"
                       className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-500 ${isHovered
