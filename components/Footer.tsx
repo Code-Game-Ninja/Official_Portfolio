@@ -560,17 +560,9 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-4 bg-charcoal/50 p-2 border border-paper/10 rounded-full pr-4 sm:pr-6 w-full md:w-auto justify-between md:justify-start">
-          <div className="w-8 h-8 bg-accent rounded-full animate-spin-slow flex items-center justify-center text-charcoal text-[8px] overflow-hidden">
-            <div className="w-full h-[1px] bg-charcoal"></div>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-mono text-[10px] opacity-50 uppercase">Currently on repeat</span>
-            <span className="font-mono text-[10px] md:text-xs">DLC - MEAN IT IN THE MORNING</span>
-          </div>
-          <span aria-hidden="true" className="ml-4 text-xl">
-            →
-          </span>
+        <div className="flex flex-col md:items-end font-mono text-[10px] sm:text-xs text-paper/50 uppercase tracking-widest">
+          <span className="text-paper/80 font-bold">Chirag Mishra // 2026</span>
+          <span className="text-paper/30 mt-1">Kishangarh, IN • All rights reserved</span>
         </div>
       </div>
     </footer>
