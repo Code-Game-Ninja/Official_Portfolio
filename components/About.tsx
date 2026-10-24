@@ -1,275 +1,228 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Terminal, InteractiveTerminal, CommandDefinition } from './Terminal';
-import { profile } from '../portfolioData';
+import { InteractiveTerminal, Terminal } from './Terminal';
+import { profile, projects } from '../portfolioData';
 
-const CYBER_CHARS = "ABCDEF123456!@#$%^&*()_+-=[]{}|;:,.<>?";
+type ProfileMode = 'classical' | 'modern';
 
-const EncryptedText: React.FC<{ text: string; className?: string; delay?: number }> = ({ text, className, delay = 0 }) => {
-  const [displayText, setDisplayText] = useState(text);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-10%" });
-  const hasAnimated = useRef(false);
-
-  useEffect(() => {
-    if (isInView && !hasAnimated.current) {
-      hasAnimated.current = true;
-      let iterations = 0;
-
-      const timeout = setTimeout(() => {
-        const interval = setInterval(() => {
-          setDisplayText(
-            text
-              .split("")
-              .map((char, index) => {
-                if (index < iterations) {
-                  return text[index];
-                }
-                return CYBER_CHARS[Math.floor(Math.random() * CYBER_CHARS.length)];
-              })
-              .join("")
-          );
-
-          if (iterations >= text.length) {
-            clearInterval(interval);
-            setDisplayText(text);
-          }
-
-          iterations += 1 / 3;
-        }, 30);
-        return () => clearInterval(interval);
-      }, delay);
-
-      return () => clearTimeout(timeout);
-    }
-  }, [isInView, text, delay]);
-
-  return (
-    <span ref={ref} className={className}>{displayText}</span>
-  );
-};
-
-// Premium Scrub-to-Reveal Typography Component
-const ScrubText: React.FC<{ text: string }> = ({ text }) => {
-  const containerRef = useRef<HTMLParagraphElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start 90%", "end 60%"]
-  });
-
-  const words = text.split(" ");
-
-  return (
-    <p ref={containerRef} className="flex flex-wrap gap-x-2 gap-y-1">
-      {words.map((word, i) => {
-        const start = i / words.length;
-        const end = start + (1 / words.length);
-        const opacity = useTransform(scrollYProgress, [start, end], [0.2, 1]);
-        const filter = useTransform(scrollYProgress, [start, end], ["blur(4px)", "blur(0px)"]);
-
-        return (
-          <motion.span key={i} style={{ opacity, filter }} className="will-change-transform">
-            {word}
-          </motion.span>
-        );
-      })}
-    </p>
-  );
-};
-
-// Auto-typing Terminal Reveal Component
-const TerminalReveal: React.FC<{ children: React.ReactNode; delayBase?: number }> = ({ children, delayBase = 0 }) => {
-  const [phase, setPhase] = useState<'idle' | 'typing' | 'revealed'>('idle');
-  const [lines, setLines] = useState<string[]>([]);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-20%" });
-
-  const bootSequence = [
-    "> INITIATING BOOT SEQUENCE...",
-    "> BYPASSING MAINFRAME ENCRYPTION...",
-    "> ACCESSING SECURE DATA...",
-    "> [ CONTENT DECRYPTED ]"
-  ];
-
-  useEffect(() => {
-    if (isInView && phase === 'idle') {
-      setPhase('typing');
-      let currentLine = 0;
-
-      const typeNextLine = () => {
-        if (currentLine < bootSequence.length) {
-          setLines(prev => [...prev, bootSequence[currentLine]]);
-          currentLine++;
-          setTimeout(typeNextLine, 400 + Math.random() * 400); // Random typing delay
-        } else {
-          setTimeout(() => setPhase('revealed'), 500); // Wait before reveal
-        }
-      };
-
-      setTimeout(typeNextLine, delayBase);
-    }
-  }, [isInView, phase, delayBase]);
-
-  return (
-    <div ref={ref} className="w-full relative">
-      {phase !== 'revealed' && (
-        <div className="font-mono text-xs md:text-sm text-accent flex flex-col gap-2 p-6 bg-charcoal/90 border border-accent/50 min-h-[150px] shadow-[0_0_15px_rgba(255,51,0,0.2)]">
-          {lines.map((line, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-            >
-              {line}
-            </motion.div>
-          ))}
-          {phase === 'typing' && (
-            <motion.div
-              animate={{ opacity: [1, 0] }}
-              transition={{ repeat: Infinity, duration: 0.8 }}
-              className="w-2 h-4 bg-accent mt-1"
-            />
-          )}
-        </div>
-      )}
-      {phase === 'revealed' && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          {children}
-        </motion.div>
-      )}
-    </div>
-  );
+const reveal = {
+  hidden: { opacity: 0, y: 35 },
+  visible: { opacity: 1, y: 0 },
 };
 
 const About: React.FC = () => {
-  const containerRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
+  const [mode, setMode] = useState<ProfileMode>('classical');
 
-  // Adjusted parallax values for deep Z-axis overlapping without breaking layout
-  // Reduced the negative spread to keep text lines readable
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, 50]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, -200]);
-  const rotateX = useTransform(scrollYProgress, [0, 1], [0, 10]);
+  const handleTabKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    let nextMode: ProfileMode;
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      nextMode = mode === 'classical' ? 'modern' : 'classical';
+    } else if (event.key === 'Home') {
+      nextMode = 'classical';
+    } else if (event.key === 'End') {
+      nextMode = 'modern';
+    } else {
+      return;
+    }
+    event.preventDefault();
+    setMode(nextMode);
+    document.getElementById('profile-tab-' + nextMode)?.focus();
+  };
+
+  const commands = [
+    {
+      command: 'profile',
+      output: (
+        <div className="border-l-2 border-accent pl-4 text-paper/75 mb-5">
+          <span className="block text-accent font-bold mb-2">[ IDENTITY ]</span>
+          <p>{profile.name} — {profile.role} at Samyora.</p>
+          <p className="mt-2">I build end-to-end web and mobile products across interfaces, APIs, databases, authentication, real-time systems, and AI integrations.</p>
+        </div>
+      ),
+    },
+    {
+      command: 'work',
+      output: (
+        <div className="border-l-2 border-[#27c93f] pl-4 mb-5">
+          <span className="block text-[#27c93f] font-bold mb-3">[ FEATURED SYSTEMS ]</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-paper/75">
+            {projects.map((project) => <span key={project.id}>→ {project.title}</span>)}
+          </div>
+        </div>
+      ),
+    },
+    {
+      command: 'stack',
+      output: (
+        <div className="border-l-2 border-[#ffbd2e] pl-4 mb-5 text-paper/75">
+          <span className="block text-[#ffbd2e] font-bold mb-2">[ CAPABILITIES ]</span>
+          <p>React · Next.js · TypeScript · Node.js · React Native · Expo · Firebase · Supabase · MongoDB · PostgreSQL · AI APIs · Real-time systems</p>
+        </div>
+      ),
+    },
+    {
+      command: 'status',
+      output: (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-l-2 border-accent pl-4 mb-5 text-paper/75">
+          <div><span className="block text-paper/35 text-[10px] uppercase">Location</span>{profile.location}</div>
+          <div><span className="block text-paper/35 text-[10px] uppercase">Availability</span>Full-time</div>
+          <div><span className="block text-paper/35 text-[10px] uppercase">Education</span>{profile.education}</div>
+          <div><span className="block text-paper/35 text-[10px] uppercase">University</span>{profile.university}</div>
+        </div>
+      ),
+    },
+    {
+      command: 'contact',
+      output: (
+        <div className="border-l-2 border-paper/40 pl-4 mb-5 text-paper/75">
+          <a className="block hover:text-accent" href={'mailto:' + profile.email}>{profile.email}</a>
+          <a className="block mt-1 hover:text-accent" href={profile.phoneHref}>{profile.phone}</a>
+        </div>
+      ),
+    },
+  ];
 
   return (
-    <section ref={containerRef} className="bg-charcoal text-paper min-h-[300vh] py-32 relative overflow-hidden flex flex-col items-center">
-
-      {/* Background massive wireframe text */}
-      <motion.div
-        className="absolute top-[5%] left-[-5%] font-sans font-bold text-[30vw] leading-none text-transparent opacity-10 uppercase select-none pointer-events-none"
-        // @ts-ignore
-        style={{ WebkitTextStroke: '2px rgba(244, 244, 240, 0.2)', y: y3 }}
+    <section id="profile" className="relative overflow-hidden bg-charcoal text-paper px-6 py-28 md:px-12 md:py-36 border-t border-paper/10">
+      <div
+        className="absolute top-16 right-[-4%] font-sans text-[24vw] font-bold leading-none text-transparent opacity-[0.055] select-none pointer-events-none"
+        style={{ WebkitTextStroke: '1px #f4f4f0' }}
       >
-        ROOT<br />SYSTEM
-      </motion.div>
-
-      <div className="w-full relative z-10 perspective-[1000px] mt-12 min-h-[250vh]">
-        <motion.div style={{ rotateX }} className="w-full relative h-full flex flex-col gap-[30vh]">
-
-          {/* BLOCK 1: Giant Typography */}
-          <div className="font-sans font-bold text-[14vw] sm:text-[15vw] md:text-[12vw] leading-[0.8] tracking-tighter uppercase text-paper mix-blend-difference z-20 relative w-full">
-            <motion.div style={{ y: y1 }} className="ml-[5%] md:ml-[10%] mb-12 border-l-[1px] border-paper/20 pl-4 md:pl-8">
-              <EncryptedText text="CHIRAG" />
-            </motion.div>
-
-            <motion.div style={{ y: y2 }} className="ml-[20%] md:ml-[30%] mb-12 flex flex-col md:flex-row items-start md:items-center gap-4">
-              <span className="font-mono font-normal text-charcoal text-[10px] md:text-sm tracking-widest bg-accent p-2 border border-accent inline-block hover:scale-105 hover:bg-transparent hover:text-accent transition-all cursor-crosshair">
-                [ STATUS: FULL STACK DEV ]
-              </span>
-              <div className="flex items-center gap-4 md:gap-8">
-                <div className="hidden md:block w-16 md:w-32 h-[1px] bg-paper"></div>
-                <EncryptedText text="MISHRA" delay={200} />
-              </div>
-            </motion.div>
-
-            <motion.div style={{ y: y1 }} className="ml-[5%] md:ml-[15%] opacity-80 z-0 text-[10vw] sm:text-[12vw] md:text-[10vw] mt-12">
-              <EncryptedText text="PROBLEM" delay={400} />
-            </motion.div>
-
-            <motion.div style={{ y: y3 }} className="text-right mr-[10%] md:mr-[20%] mt-[5%] z-30 relative text-[12vw] sm:text-[14vw] md:text-[12vw]">
-              <EncryptedText text="SOLVER" delay={600} />
-            </motion.div>
-
-            <motion.div style={{ y: y2 }} className="ml-[10%] md:ml-[25%] mt-12 text-accent opacity-90 z-40 relative">
-              <EncryptedText text="AND AI" delay={800} />
-            </motion.div>
-          </div>
-
-          {/* BLOCK 2: The Giant Interactive Terminal Window */}
-          <div className="relative w-full md:w-[80%] mx-auto mt-32 z-50 min-h-[80vh] flex flex-col items-center justify-center">
-
-            <div className="mb-4 text-center opacity-70 font-mono text-sm max-w-lg">
-              <span className="text-accent animate-pulse block mb-2">[ DIRECT ACCESS GRANTED ]</span>
-              Interact directly with the terminal below. Type <span className="text-accent">help</span> to view available system commands.
-            </div>
-
-            <Terminal className="max-w-4xl w-full h-auto min-h-[60vh] text-sm md:text-base">
-              <InteractiveTerminal
-                welcomeMessage="Secure connection established. Awaiting input..."
-                commands={[
-                  {
-                    command: "profile",
-                    output: (
-                      <div className="flex flex-col gap-2 border-l-2 border-accent pl-4 text-paper/80 mb-4">
-                        <span className="text-accent font-bold">[ Technical Profile ]</span>
-                        <p className="max-w-2xl">Full Stack Developer at Samyora building responsive products across front-end, back-end, APIs, authentication, databases, and modern TypeScript application stacks.</p>
-                        <div className="flex gap-4 mt-2">
-                          <Link to="/story" className="text-accent hover:underline">[Read Log]</Link>
-                          <a href="/Resume_Chirag.pdf" download="Chirag_Mishra_Resume.pdf" className="text-accent hover:underline">[.PDF]</a>
-                        </div>
-                      </div>
-                    )
-                  },
-                  {
-                    command: "status",
-                    output: (
-                      <div className="flex flex-col gap-2 border-l-2 border-[#ffbd2e] pl-4 text-paper/80 mb-4">
-                        <span className="text-[#ffbd2e] font-bold animate-pulse">[ OVERRIDE ACTIVE ] SYS.02</span>
-                        <p className="max-w-2xl">Available for full-time opportunities. Focused on scalable web and mobile products, thoughtful UI/UX, API integration, real-time systems, AI features, and secure authentication.</p>
-                      </div>
-                    )
-                  },
-                  {
-                    command: "telemetry",
-                    output: (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-l-2 border-[#27c93f] pl-4 text-paper/80 mb-4">
-                        <div>
-                          <span className="opacity-50 text-[10px] uppercase block">Location</span>
-                          <span className="font-bold text-[#27c93f]">{profile.location.toUpperCase()}</span>
-                        </div>
-                        <div>
-                          <span className="opacity-50 text-[10px] uppercase block">Status</span>
-                          <span className="font-bold flex items-center gap-2">
-                            <span className="w-2 h-2 bg-[#27c93f] rounded-full animate-pulse"></span>
-                            AVAILABLE FULL-TIME
-                          </span>
-                        </div>
-                        <div className="md:col-span-2">
-                          <span className="opacity-50 text-[10px] uppercase block">Education</span>
-                          <span className="font-bold block">{profile.education}</span>
-                          <span className="opacity-50 text-xs">{profile.university}</span>
-                        </div>
-                      </div>
-                    )
-                  }
-                ]}
-              />
-            </Terminal>
-          </div>
-
-        </motion.div>
+        PROFILE
       </div>
 
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 border-b border-paper/15 pb-10">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent mb-5">Profile interface / Choose a view</p>
+            <h2 className="font-sans font-bold text-5xl sm:text-7xl md:text-8xl uppercase tracking-[-0.06em] leading-[0.82]">
+              One person.<br /><span className="text-paper/30">Two lenses.</span>
+            </h2>
+          </div>
+
+          <div className="inline-flex w-full sm:w-auto self-start lg:self-auto border border-paper/20 p-1 font-mono text-[10px] uppercase tracking-[0.12em] sm:tracking-[0.18em]" role="tablist" aria-label="Profile presentation mode">
+            {(['classical', 'modern'] as ProfileMode[]).map((option) => (
+              <button
+                key={option}
+                type="button"
+                role="tab"
+                id={'profile-tab-' + option}
+                aria-controls={'profile-panel-' + option}
+                aria-selected={mode === option}
+                tabIndex={mode === option ? 0 : -1}
+                onKeyDown={handleTabKeyDown}
+                onClick={() => setMode(option)}
+                className={'flex-1 sm:flex-none px-3 sm:px-5 py-3 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent ' + (mode === option ? 'bg-paper text-charcoal' : 'text-paper/45 hover:text-paper')}
+              >
+                {option === 'classical' ? 'Classical / Story' : 'Modern / Terminal'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <AnimatePresence mode="wait">
+          {mode === 'classical' ? (
+            <motion.div
+              key="classical"
+              id="profile-panel-classical"
+              role="tabpanel"
+              aria-labelledby="profile-tab-classical"
+              initial="hidden"
+              animate="visible"
+              exit={{ opacity: 0, y: -20 }}
+              variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+              className="pt-16 md:pt-24"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
+                <motion.div variants={reveal} transition={{ duration: 0.7 }} className="lg:col-span-4">
+                  <div className="relative h-[520px] border border-paper/15 overflow-hidden">
+                    <img src={profile.githubAvatar} alt={profile.name} className="w-full h-full object-cover object-[center_28%] grayscale contrast-125 brightness-90 transition-all duration-700 hover:grayscale-0 hover:brightness-100" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/10 to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 p-6">
+                      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">Portrait / Kishangarh</span>
+                      <p className="font-sans text-3xl font-bold uppercase mt-3">Builder of complete systems.</p>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <div className="lg:col-span-8 lg:pl-10 flex flex-col justify-between">
+                  <motion.div variants={reveal} transition={{ duration: 0.7 }}>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-paper/35">01 / The short version</span>
+                    <p className="font-sans text-3xl md:text-5xl leading-[1.08] tracking-[-0.035em] mt-6 max-w-4xl">
+                      I am a Full Stack Developer who enjoys turning complex product ideas into clear, dependable, and memorable digital experiences.
+                    </p>
+                  </motion.div>
+
+                  <motion.div variants={reveal} transition={{ duration: 0.7 }} className="mt-16 grid grid-cols-1 md:grid-cols-2 border-t border-paper/15">
+                    {[
+                      ['Current chapter', 'Building full-stack products at Samyora.'],
+                      ['Academic path', profile.education + ', ' + profile.university + '.'],
+                      ['Foundation', 'Catering and university guidance systems at Unified Mentor.'],
+                      ['Direction', 'Scalable web, mobile, real-time, and AI-enabled products.'],
+                    ].map(([title, description]) => (
+                      <div key={title} className="py-8 md:pr-8 border-b border-paper/15 md:odd:border-r md:even:pl-8">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">{title}</span>
+                        <p className="font-mono text-sm leading-relaxed text-paper/60 mt-4">{description}</p>
+                      </div>
+                    ))}
+                  </motion.div>
+                </div>
+              </div>
+
+              <motion.div variants={reveal} transition={{ duration: 0.7 }} className="mt-20 md:mt-28 grid grid-cols-1 lg:grid-cols-12 gap-8 border-y border-paper/15 py-12">
+                <div className="lg:col-span-3">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-paper/35">02 / Working language</span>
+                </div>
+                <div className="lg:col-span-9 flex flex-wrap gap-x-7 gap-y-3 font-sans text-2xl md:text-4xl font-bold uppercase tracking-[-0.04em]">
+                  {['React', 'Next.js', 'TypeScript', 'Node.js', 'React Native', 'Databases', 'AI APIs', 'Motion'].map((item, index) => (
+                    <span key={item} className={index % 3 === 1 ? 'text-paper/25' : 'text-paper'}>{item}</span>
+                  ))}
+                </div>
+              </motion.div>
+
+              <motion.div variants={reveal} transition={{ duration: 0.7 }} className="mt-16 flex flex-col md:flex-row md:items-center justify-between gap-8">
+                <p className="font-mono text-sm text-paper/55 max-w-xl">The longer story includes curiosity, university, internships, production work, and the projects that shaped how I build.</p>
+                <div className="flex flex-wrap gap-3">
+                  <Link to="/story" className="bg-accent text-charcoal px-6 py-4 font-mono text-[10px] font-bold uppercase tracking-[0.18em] hover:bg-paper transition-colors">Read full story</Link>
+                  <a href={profile.resumeUrl} target="_blank" rel="noreferrer" className="border border-paper/25 px-6 py-4 font-mono text-[10px] font-bold uppercase tracking-[0.18em] hover:border-accent hover:text-accent transition-colors">Resume ↗</a>
+                </div>
+              </motion.div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="modern"
+              id="profile-panel-modern"
+              role="tabpanel"
+              aria-labelledby="profile-tab-modern"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.55 }}
+              className="pt-16 md:pt-24"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+                <div className="lg:col-span-3 font-mono text-xs leading-relaxed text-paper/45">
+                  <p className="text-accent uppercase tracking-[0.2em] mb-5">Interactive profile</p>
+                  <p>Type <span className="text-paper">help</span> to inspect available commands.</p>
+                  <div className="mt-8 border-t border-paper/15 pt-5 space-y-2">
+                    <p>profile — overview</p>
+                    <p>work — selected systems</p>
+                    <p>stack — capabilities</p>
+                    <p>status — availability</p>
+                    <p>contact — direct channel</p>
+                  </div>
+                </div>
+                <div className="lg:col-span-9">
+                  <Terminal className="min-h-[620px] text-sm md:text-base border-paper/15 shadow-[0_30px_100px_rgba(0,0,0,0.45)]">
+                    <InteractiveTerminal welcomeMessage="Chirag OS v2.6 connected. Type 'help' to explore the profile." commands={commands} />
+                  </Terminal>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </section>
   );
 };

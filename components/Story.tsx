@@ -159,7 +159,7 @@ const Story: React.FC = () => {
             Return Home
           </Link>
           <span className="font-mono text-xs uppercase tracking-widest text-paper/40 hidden md:block">
-            [ EST. 199X — RAJ ]
+            [ KISHANGARH — INDIA ]
           </span>
         </div>
 

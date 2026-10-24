@@ -1,3 +1,6 @@
+import resumeUrl from './Chirag_Resume (1).pdf?url';
+import profileAvatar from './profile.jpg';
+
 export interface PortfolioProject {
   id: number;
   title: string;
@@ -22,8 +25,11 @@ export const profile = {
   university: "Central University of Rajasthan",
   availability: "Available for full-time opportunities",
   githubUrl: "https://github.com/Code-Game-Ninja",
-  githubAvatar: "https://avatars.githubusercontent.com/u/197383039?v=4",
+  avatar: profileAvatar,
+  githubAvatar: profileAvatar,
   linkedinUrl: "https://linkedin.com/in/chirag-mishra-14b128337",
+  resumeUrl,
+  contactFormEndpoint: "https://formspree.io/f/xoeevvzp",
 };
 
 export const projects: PortfolioProject[] = [

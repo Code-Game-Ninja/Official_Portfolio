@@ -112,8 +112,9 @@ export const InteractiveTerminal = ({ commands, welcomeMessage }: { commands: Co
     const [counter, setCounter] = useState(0);
 
     // Focus input anywhere clicked inside terminal
-    const handleTerminalClick = () => {
-        inputRef.current?.focus();
+    const handleTerminalClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        if ((event.target as HTMLElement).closest('a, button, input')) return;
+        inputRef.current?.focus({ preventScroll: true });
     };
 
     // Auto-scroll to bottom when history changes
@@ -185,7 +186,7 @@ export const InteractiveTerminal = ({ commands, welcomeMessage }: { commands: Co
             }
 
             // Check if command exists
-            const found = commands.find(c => parsedCmd.includes(c.command));
+            const found = commands.find(c => parsedCmd === c.command);
 
             if (found) {
                 setHistory(prev => [...prev, { command: input, output: found.output, id: counter }]);
@@ -203,7 +204,7 @@ export const InteractiveTerminal = ({ commands, welcomeMessage }: { commands: Co
             className="w-full h-full flex flex-col cursor-text outline-none relative"
             onClick={handleTerminalClick}
         >
-            <div ref={containerRef} className="flex-1 w-full pb-8 pr-2">
+            <div ref={containerRef} data-lenis-prevent className="flex-1 w-full max-h-[65vh] overflow-y-auto overscroll-contain break-words pb-8 pr-2">
                 {welcomeMessage && (
                     <div className="text-paper/60 mb-6 whitespace-pre-wrap">{welcomeMessage}</div>
                 )}
@@ -232,7 +233,7 @@ export const InteractiveTerminal = ({ commands, welcomeMessage }: { commands: Co
                     <input
                         ref={inputRef}
                         type="text"
-                        autoFocus
+                        aria-label="Terminal command"
                         autoComplete="off"
                         spellCheck="false"
                         value={input}

@@ -1,31 +1,195 @@
-import React from 'react';
-import { motion, Variants } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 
-// Tech stack with logos (using CDN icons)
-const techStack = [
-  // Large items (span 2 cols)
-  { name: "React", code: "FE", size: "large", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
-  { name: "Node.js", code: "BE", size: "large", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
+type TechCategory = 'all' | 'frontend' | 'backend' | 'mobile' | 'database' | 'cloud_tools';
 
-  // Medium items
-  { name: "TypeScript", code: "FE", size: "medium", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
-  { name: "MongoDB", code: "BE", size: "medium", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
-  { name: "Tailwind", code: "FE", size: "medium", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" },
-  { name: "Express", code: "BE", size: "medium", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
+interface TechItem {
+  name: string;
+  category: 'frontend' | 'backend' | 'mobile' | 'database' | 'cloud_tools';
+  code: string;
+  role: string;
+  tag: string;
+  logo: string;
+  featured?: boolean;
+}
 
-  // Regular items
-  { name: "Next.js", code: "FE", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
-  { name: "Python", code: "AI", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
-  { name: "Git", code: "TL", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
-  { name: "Figma", code: "TL", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
-  { name: "Docker", code: "TL", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" },
-  { name: "PostgreSQL", code: "BE", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" },
-  { name: "GraphQL", code: "BE", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg" },
-  { name: "AWS", code: "TL", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" },
-  { name: "Linux", code: "TL", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" },
-  { name: "GSAP", code: "FE", size: "small", logo: "https://cdn.worldvectorlogo.com/logos/gsap-greensock.svg" },
-  { name: "Three.js", code: "FE", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg" },
-  { name: "Vercel", code: "TL", size: "small", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg" },
+const techStack: TechItem[] = [
+  {
+    name: "React",
+    category: "frontend",
+    code: "FE",
+    role: "Component Architecture & State",
+    tag: "CORE",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    featured: true,
+  },
+  {
+    name: "Next.js 15",
+    category: "frontend",
+    code: "FE",
+    role: "Full-Stack SSR & App Router",
+    tag: "PRODUCTION",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
+    featured: true,
+  },
+  {
+    name: "TypeScript",
+    category: "frontend",
+    code: "TS",
+    role: "Type-Safe End-to-End Scale",
+    tag: "CORE",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+    featured: true,
+  },
+  {
+    name: "Node.js",
+    category: "backend",
+    code: "BE",
+    role: "High-Concurrency Server Runtime",
+    tag: "CORE",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+    featured: true,
+  },
+  {
+    name: "Express.js",
+    category: "backend",
+    code: "BE",
+    role: "REST APIs & Middleware Layer",
+    tag: "API",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
+  },
+  {
+    name: "React Native",
+    category: "mobile",
+    code: "MOB",
+    role: "Cross-Platform iOS & Android",
+    tag: "MOBILE",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    featured: true,
+  },
+  {
+    name: "Expo",
+    category: "mobile",
+    code: "MOB",
+    role: "Native Toolchain & EAS Delivery",
+    tag: "MOBILE",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+  },
+  {
+    name: "Supabase",
+    category: "database",
+    code: "DATA",
+    role: "PostgreSQL, Auth & Realtime",
+    tag: "DATABASE",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg",
+    featured: true,
+  },
+  {
+    name: "Firebase",
+    category: "database",
+    code: "DATA",
+    role: "Live Sockets & Cloud Firestore",
+    tag: "DATABASE",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
+  },
+  {
+    name: "PostgreSQL",
+    category: "database",
+    code: "DATA",
+    role: "Relational Schemas & Indexing",
+    tag: "DATABASE",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
+  },
+  {
+    name: "MongoDB",
+    category: "database",
+    code: "DATA",
+    role: "Document Store & Aggregations",
+    tag: "DATABASE",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
+  },
+  {
+    name: "Tailwind CSS",
+    category: "frontend",
+    code: "UI",
+    role: "Modern Responsive Utility Engine",
+    tag: "STYLING",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg",
+  },
+  {
+    name: "GSAP / Motion",
+    category: "frontend",
+    code: "UI",
+    role: "Kinetic Animations & Interactive Timelines",
+    tag: "MOTION",
+    logo: "https://cdn.worldvectorlogo.com/logos/gsap-greensock.svg",
+  },
+  {
+    name: "Three.js",
+    category: "frontend",
+    code: "UI",
+    role: "WebGL 3D Interactive Graphics",
+    tag: "3D",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg",
+  },
+  {
+    name: "Python & AI",
+    category: "backend",
+    code: "AI",
+    role: "RAG Workflows & Gemini Integration",
+    tag: "INTELLIGENCE",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+    featured: true,
+  },
+  {
+    name: "GraphQL",
+    category: "backend",
+    code: "API",
+    role: "Declarative Queries & Schema Types",
+    tag: "API",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg",
+  },
+  {
+    name: "Docker",
+    category: "cloud_tools",
+    code: "OPS",
+    role: "Containerized Microservices",
+    tag: "DEVOPS",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
+  },
+  {
+    name: "AWS",
+    category: "cloud_tools",
+    code: "OPS",
+    role: "Cloud Compute, S3 & Production Infra",
+    tag: "CLOUD",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg",
+  },
+  {
+    name: "Git & GitHub",
+    category: "cloud_tools",
+    code: "DEV",
+    role: "Version Architecture & Workflows",
+    tag: "TOOL",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
+  },
+  {
+    name: "Linux",
+    category: "cloud_tools",
+    code: "SYS",
+    role: "POSIX Shell Automation & Server Config",
+    tag: "OS",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg",
+  },
+];
+
+const categories: { id: TechCategory; label: string }[] = [
+  { id: 'all', label: 'All Modules' },
+  { id: 'frontend', label: 'Frontend' },
+  { id: 'backend', label: 'Backend & APIs' },
+  { id: 'mobile', label: 'Mobile' },
+  { id: 'database', label: 'Data & Storage' },
+  { id: 'cloud_tools', label: 'Cloud & DevOps' },
 ];
 
 const certifications = [
@@ -39,68 +203,64 @@ const certifications = [
 ];
 
 const Info: React.FC = () => {
-  const [hoveredCert, setHoveredCert] = React.useState<string | null>(null);
+  const [hoveredCert, setHoveredCert] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<TechCategory>('all');
 
-  // Enhanced Animation Variants
+  const filteredTech = selectedCategory === 'all'
+    ? techStack
+    : techStack.filter(item => item.category === selectedCategory);
+
   const container: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
+        staggerChildren: 0.08,
+        delayChildren: 0.1,
+      },
+    },
   };
 
   const item: Variants = {
-    hidden: { y: 50, opacity: 0, filter: 'blur(5px)' },
+    hidden: { y: 40, opacity: 0, filter: 'blur(4px)' },
     show: {
       y: 0,
       opacity: 1,
       filter: 'blur(0px)',
       transition: {
-        duration: 0.8,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
-  };
-
-  const bentoItem: Variants = {
-    hidden: { y: 30, opacity: 0, scale: 0.95 },
-    show: {
-      y: 0,
-      opacity: 1,
-      scale: 1,
-      transition: {
         duration: 0.6,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
   };
 
   return (
     <section id="info" className="bg-charcoal text-paper py-24 md:py-32 border-t border-paper/10 relative overflow-hidden">
-
       {/* Background Grid Lines */}
-      <div className="absolute inset-0 z-0 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(236, 235, 228, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(236, 235, 228, 0.03) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(236, 235, 228, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(236, 235, 228, 0.03) 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
       <motion.div
         initial={{ x: 100, opacity: 0 }}
         whileInView={{ x: 0, opacity: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
+        transition={{ duration: 1.5, ease: 'easeOut' }}
         className="absolute right-0 top-32 text-[15vw] font-bold text-paper/5 leading-none select-none pointer-events-none font-sans mix-blend-overlay"
       >
         DATA
       </motion.div>
 
-      <div className="max-w-[95vw] mx-auto relative z-10 flex flex-col gap-20 sm:gap-28 md:gap-40">
-
+      <div className="max-w-[95vw] mx-auto relative z-10 flex flex-col gap-24 sm:gap-32 md:gap-44">
         {/* Certifications: The Data Log */}
         <div>
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 sm:mb-12 md:mb-16 border-b border-paper/20 pb-4 sm:pb-6 gap-4">
             <motion.h2
-              initial={{ opacity: 0, x: -50, filter: "blur(10px)" }}
-              whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+              initial={{ opacity: 0, x: -50, filter: 'blur(10px)' }}
+              whileInView={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
               className="font-sans font-bold text-4xl sm:text-5xl md:text-6xl lg:text-8xl tracking-tighter uppercase"
@@ -113,7 +273,7 @@ const Info: React.FC = () => {
               transition={{ delay: 0.5 }}
               className="font-mono text-xs uppercase tracking-widest opacity-60 mb-2"
             >
-              [ VERIFIED CREDENTIALS ]
+              [ CERTIFICATIONS ]
             </motion.span>
           </div>
 
@@ -121,7 +281,7 @@ const Info: React.FC = () => {
             variants={container}
             initial="hidden"
             whileInView="show"
-            viewport={{ once: true, margin: "-10%" }}
+            viewport={{ once: true, margin: '-10%' }}
             className="w-full"
           >
             {/* Table Header */}
@@ -144,7 +304,6 @@ const Info: React.FC = () => {
                     onMouseEnter={() => setHoveredCert(cert.id)}
                     className="group relative border-b border-paper/10 overflow-hidden cursor-pointer transition-colors duration-500"
                   >
-                    {/* Extreme brutalist hover bg */}
                     <motion.div
                       className="absolute inset-0 bg-accent z-0"
                       initial={{ scaleY: 0 }}
@@ -153,11 +312,10 @@ const Info: React.FC = () => {
                       style={{ originY: 1 }}
                     />
 
-                    {/* Massive Background Number on hover */}
                     <motion.div
                       className="absolute right-10 top-1/2 -translate-y-1/2 text-[15vw] font-bold font-sans opacity-0 text-charcoal/10 pointer-events-none z-0 tracking-tighter"
                       animate={{ opacity: isHovered ? 1 : 0, scale: isHovered ? 1 : 0.8, x: isHovered ? 0 : 50 }}
-                      transition={{ duration: 0.5, ease: "easeOut" }}
+                      transition={{ duration: 0.5, ease: 'easeOut' }}
                     >
                       {cert.id}
                     </motion.div>
@@ -187,114 +345,188 @@ const Info: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Tech Stack: The Modular Grid */}
+        {/* Upgraded Tech Stack: Architecture & Modules */}
         <div>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 sm:mb-12 md:mb-16 border-b border-paper/20 pb-4 sm:pb-6 gap-4">
-            <motion.h2
-              initial={{ opacity: 0, x: -50, filter: "blur(10px)" }}
-              whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="font-sans font-bold text-4xl sm:text-5xl md:text-6xl lg:text-8xl tracking-tighter uppercase"
-            >
-              Tech Stack
-            </motion.h2>
+          {/* Section Heading & Sanskrit Accent */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 sm:mb-12 border-b border-paper/20 pb-4 sm:pb-6 gap-4">
+            <div>
+              <span className="font-mono text-[10px] uppercase tracking-[0.26em] text-accent block mb-3">
+                02 // System Capabilities
+              </span>
+              <motion.h2
+                initial={{ opacity: 0, x: -50, filter: 'blur(10px)' }}
+                whileInView={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="font-sans font-bold text-4xl sm:text-5xl md:text-6xl lg:text-8xl tracking-tighter uppercase"
+              >
+                Tech Stack
+              </motion.h2>
+            </div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-right"
+              className="text-left md:text-right"
             >
-              <span className="font-sanskrit text-4xl text-paper/50 block mb-2">कौशलम्</span>
+              <span className="font-sanskrit text-4xl text-paper/50 block mb-1">कौशलम्</span>
               <span className="font-mono text-xs uppercase tracking-widest opacity-60">
-                [ SYSTEM MODULES ]
+                [ 20 PRODUCTION MODULES ]
               </span>
             </motion.div>
           </div>
 
-          {/* Bento Grid */}
+          {/* Telemetry Strip */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 border border-paper/10 bg-paper/[0.02] mb-10 font-mono text-[11px] uppercase tracking-wider text-paper/60">
+            <div>
+              <span className="text-paper/30 block mb-1">Stack Scope</span>
+              <span className="text-accent font-bold">End-to-End Full Stack</span>
+            </div>
+            <div>
+              <span className="text-paper/30 block mb-1">Mobile Engine</span>
+              <span className="text-paper font-bold">React Native + Expo</span>
+            </div>
+            <div>
+              <span className="text-paper/30 block mb-1">Intelligence</span>
+              <span className="text-paper font-bold">Gemini & Vertex AI RAG</span>
+            </div>
+            <div>
+              <span className="text-paper/30 block mb-1">Runtime Status</span>
+              <span className="text-[#27c93f] flex items-center gap-1.5 font-bold">
+                <span className="w-2 h-2 rounded-full bg-[#27c93f] animate-pulse"></span>
+                Operational
+              </span>
+            </div>
+          </div>
+
+          {/* Interactive Category Filter Pills */}
+          <div className="flex flex-wrap gap-2 sm:gap-3 mb-10">
+            {categories.map((cat) => {
+              const count = cat.id === 'all'
+                ? techStack.length
+                : techStack.filter(t => t.category === cat.id).length;
+              const isSelected = selectedCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`px-4 py-2.5 rounded-full font-mono text-xs uppercase tracking-wider transition-all duration-300 flex items-center gap-2 border ${
+                    isSelected
+                      ? 'bg-accent text-charcoal border-accent font-bold shadow-[0_0_20px_rgba(235,179,5,0.3)]'
+                      : 'border-paper/15 text-paper/60 hover:text-paper hover:border-paper/30 bg-paper/[0.02]'
+                  }`}
+                >
+                  <span>{cat.label}</span>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded ${
+                    isSelected ? 'bg-charcoal/20 text-charcoal' : 'bg-paper/10 text-paper/50'
+                  }`}>
+                    {count.toString().padStart(2, '0')}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Dynamic Animated Grid */}
           <motion.div
-            variants={container}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-10%" }}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4"
+            layout
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
           >
-            {techStack.map((tech, i) => (
-              <motion.div
-                key={i}
-                variants={bentoItem}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className={`
-                   relative group cursor-pointer overflow-hidden rounded-2xl border border-paper/10 bg-paper/5 backdrop-blur-sm
-                   ${tech.size === 'large' ? 'col-span-2 row-span-2 min-h-[200px] sm:min-h-[250px]' : ''}
-                   ${tech.size === 'medium' ? 'col-span-2 sm:col-span-1 lg:col-span-2 min-h-[120px] sm:min-h-[150px]' : ''}
-                   ${tech.size === 'small' ? 'col-span-1 min-h-[100px] sm:min-h-[120px]' : ''}
-                   transition-all duration-500 ease-out
-                 `}
-              >
-                {/* Background Logo - Appears on Hover */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-20 transition-all duration-500 ease-out scale-75 group-hover:scale-100">
-                  <img
-                    src={tech.logo}
-                    alt={tech.name}
-                    className={`
-                        ${tech.size === 'large' ? 'w-40 h-40 sm:w-52 sm:h-52' : ''}
-                        ${tech.size === 'medium' ? 'w-24 h-24 sm:w-32 sm:h-32' : ''}
-                        ${tech.size === 'small' ? 'w-16 h-16 sm:w-20 sm:h-20' : ''}
-                        object-contain filter brightness-0 invert
-                      `}
-                  />
-                </div>
+            <AnimatePresence mode="popLayout">
+              {filteredTech.map((tech, i) => (
+                <motion.div
+                  layout
+                  key={tech.name}
+                  initial={{ opacity: 0, scale: 0.92, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.92, y: 10 }}
+                  transition={{ duration: 0.35, delay: i * 0.02 }}
+                  whileHover={{ y: -6 }}
+                  className="group relative rounded-xl border border-paper/10 bg-paper/[0.03] backdrop-blur-md p-6 flex flex-col justify-between min-h-[190px] transition-all duration-300 hover:border-accent/50 hover:bg-paper/[0.06] hover:shadow-[0_15px_35px_rgba(0,0,0,0.5)] overflow-hidden"
+                >
+                  {/* Subtle Accent Glow on Hover */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full blur-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                {/* Gradient Overlay on Hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-accent/0 via-accent/0 to-accent/0 group-hover:from-accent/20 group-hover:via-accent/10 group-hover:to-transparent transition-all duration-500"></div>
-
-                {/* Content */}
-                <div className="relative z-10 h-full p-3 sm:p-4 flex flex-col justify-between">
-                  {/* Top Row */}
-                  <div className="flex justify-between items-start">
-                    <span className="font-mono text-[8px] sm:text-[10px] uppercase tracking-widest text-paper/40 group-hover:text-accent transition-colors duration-300">
+                  {/* Top Bar: Code badge, tag, number */}
+                  <div className="flex justify-between items-center font-mono text-[10px] uppercase tracking-widest text-paper/40 relative z-10">
+                    <span className="text-accent group-hover:underline">
                       [{tech.code}]
                     </span>
-                    <span className="font-mono text-[8px] sm:text-[10px] text-paper/20 group-hover:text-paper/60 transition-colors duration-300">
+                    <span className="px-2 py-0.5 rounded border border-paper/10 text-[9px] text-paper/60 group-hover:border-accent/40 group-hover:text-accent transition-colors">
+                      {tech.tag}
+                    </span>
+                    <span>
                       {(i + 1).toString().padStart(2, '0')}
                     </span>
                   </div>
 
-                  {/* Center - Tech Name */}
-                  <div className="flex-1 flex items-center justify-center">
-                    <span className={`
-                          font-sans font-bold uppercase text-center leading-tight
-                          group-hover:text-accent transition-colors duration-300
-                          ${tech.size === 'large' ? 'text-2xl sm:text-3xl md:text-4xl' : ''}
-                          ${tech.size === 'medium' ? 'text-lg sm:text-xl md:text-2xl' : ''}
-                          ${tech.size === 'small' ? 'text-sm sm:text-base md:text-lg' : ''}
-                        `}>
-                      {tech.name}
+                  {/* Main Identity: Logo + Name */}
+                  <div className="flex items-center gap-4 my-4 relative z-10">
+                    <div className="w-12 h-12 rounded-lg bg-paper/5 border border-paper/10 flex items-center justify-center p-2.5 transition-transform duration-300 group-hover:scale-110 group-hover:border-accent/40 flex-shrink-0">
+                      <img
+                        src={tech.logo}
+                        alt={tech.name}
+                        className="w-full h-full object-contain filter group-hover:brightness-110 transition-all duration-300"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="font-sans font-bold text-xl uppercase tracking-tight text-paper group-hover:text-accent transition-colors">
+                        {tech.name}
+                      </h3>
+                      <p className="font-mono text-xs text-paper/55 leading-tight mt-1 line-clamp-2">
+                        {tech.role}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Bottom Line: Status dot & Direction Arrow */}
+                  <div className="flex justify-between items-center pt-3 border-t border-paper/10 font-mono text-[10px] text-paper/40 relative z-10 group-hover:text-paper/70 transition-colors">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                      Production
+                    </span>
+                    <span className="transform transition-transform duration-300 group-hover:translate-x-1.5 group-hover:text-accent text-sm">
+                      →
                     </span>
                   </div>
-
-                  {/* Bottom Row */}
-                  <div className="flex justify-between items-end">
-                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-paper/10 group-hover:bg-accent transition-colors duration-300"></div>
-                    <motion.span
-                      className="text-[10px] sm:text-xs text-paper/0 group-hover:text-paper/60 transition-all duration-300"
-                      initial={{ opacity: 0, x: -10 }}
-                      whileHover={{ opacity: 1, x: 0 }}
-                    >
-                      →
-                    </motion.span>
-                  </div>
-                </div>
-
-                {/* Border Glow Effect on Hover */}
-                <div className="absolute inset-0 rounded-2xl border border-accent/0 group-hover:border-accent/30 transition-all duration-500"></div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </motion.div>
-        </div>
 
+          {/* Kinetic Marquee Ticker */}
+          <div className="mt-16 overflow-hidden border-y border-paper/10 py-4 font-mono text-xs uppercase tracking-[0.2em] text-paper/40 bg-paper/[0.015]">
+            <motion.div
+              animate={{ x: [0, -1200] }}
+              transition={{ repeat: Infinity, duration: 25, ease: 'linear' }}
+              className="flex whitespace-nowrap gap-8"
+            >
+              {[1, 2, 3].map((set) => (
+                <div key={set} className="flex gap-8 items-center">
+                  <span className="text-accent font-bold">SYSTEM WORKFLOW:</span>
+                  <span>React 19 & Next.js 15</span>
+                  <span className="text-paper/20">◆</span>
+                  <span>TypeScript Strict Types</span>
+                  <span className="text-paper/20">◆</span>
+                  <span>Expo Native EAS Deployments</span>
+                  <span className="text-paper/20">◆</span>
+                  <span>Supabase Postgres & Row-Level Security</span>
+                  <span className="text-paper/20">◆</span>
+                  <span>Google Gemini & Vertex AI RAG</span>
+                  <span className="text-paper/20">◆</span>
+                  <span>WebSocket Realtime Feeds</span>
+                  <span className="text-paper/20">◆</span>
+                  <span>Docker Orchestration</span>
+                  <span className="text-paper/20">◆</span>
+                  <span>High-Fidelity GSAP Motion</span>
+                  <span className="text-paper/20">◆</span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );

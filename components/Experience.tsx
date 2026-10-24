@@ -4,14 +4,25 @@ import { motion, Variants } from 'framer-motion';
 const Experience: React.FC = () => {
   const experiences = [
     {
+      company: "Samyora",
+      role: "Full Stack Developer",
+      date: "Present",
+      type: "Current Role",
+      description: [
+        "Build and maintain full-stack product features across responsive front-end interfaces, back-end services, APIs, authentication, and data workflows.",
+        "Translate product requirements into reliable, maintainable user experiences with modern JavaScript and TypeScript tooling.",
+        "Collaborate across the development lifecycle, from implementation and debugging to integration and production-ready delivery."
+      ]
+    },
+    {
       company: "Unified Mentor Pvt. Ltd.",
-      role: "Fullstack Web Development Intern",
+      role: "Full Stack Web Development Intern",
       date: "June 2025 - September 2025",
       type: "Remote",
       description: [
-        "Developed and maintained responsive web applications using front-end and back-end technologies, including JavaScript, Express.js, and MongoDB.",
-        "Collaborated with the development team on building dynamic and interactive user interfaces with modern CSS frameworks like Tailwind CSS.",
-        "Assisted in API integration and database management to ensure seamless application functionality and data flow."
+        "Built a catering system for browsing services, reviewing menus, and managing event reservation workflows.",
+        "Built a university career guidance system to help students explore strengths, recommendations, and suitable career paths.",
+        "Worked across responsive interfaces, Express.js APIs, MongoDB data flows, authentication, and Tailwind CSS implementation."
       ]
     }
   ];

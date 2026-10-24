@@ -89,7 +89,7 @@ const Archive: React.FC = () => {
               Total Projects: {projects.length.toString().padStart(2, '0')}
             </p>
             <p className="font-mono text-xs uppercase tracking-widest text-paper/40">
-              2023 — 2025
+              2025 — 2026
             </p>
           </div>
         </div>
@@ -160,6 +160,8 @@ const Archive: React.FC = () => {
                   <div className="col-span-1 text-right flex justify-end w-full">
                     <a
                       href={item.primaryUrl}
+                      aria-label={`${item.primaryLabel}: ${item.title}`}
+                      title={item.primaryLabel}
                       target="_blank"
                       rel="noreferrer"
                       className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-500 ${isHovered

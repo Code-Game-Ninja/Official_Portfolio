@@ -59,7 +59,7 @@ const AppContent: React.FC = () => {
             >
               <div className="flex justify-between items-start text-[10px] sm:text-xs">
                 <span>[ System Initializing ]</span>
-                <span>Rajasthan, India</span>
+                <span>Kishangarh, India</span>
               </div>
 
               <div className="flex flex-col items-center">
